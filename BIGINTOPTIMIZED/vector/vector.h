@@ -5,7 +5,7 @@
 #include <memory>
 
 template <class T>
-T* copy_data(size_t capacity, T* data, size_t size, typename std::enable_if<std::is_trivially_constructible<T>::value>::type* = nullptr) {
+T* copy_data(size_t capacity, T* data, size_t size) {
 	T* temp = static_cast<T*>(operator new(capacity * sizeof(T)));
 	memcpy(temp, data, sizeof(T) * size);
 	return temp;
@@ -52,6 +52,7 @@ private:
 	size_t _size;
 	
 	void switch_to_big();
+	void switch_to_small();
 	static const size_t SMALL_SIZE = 4;
 
 	struct big_object {
@@ -191,6 +192,7 @@ template <class T>
 void vector<T>::pop_back() {
 	change();
 	_size--;
+	if(is_big() && _size == SMALL_SIZE) switch_to_small();
 }
 
 template <class T>
@@ -241,6 +243,16 @@ void vector<T>::switch_to_big() {
 	T* temp = copy_data(size(), get_data(), size());
 	new(&_data.big_data) big_object(temp, size());
 	_cur_data = temp;
+}
+
+template <class T>
+void vector<T>::switch_to_small() {
+	T* temp = copy_data(size(), get_data(), size());
+	_data.big_data.~big_object();
+	for(size_t i = 0; i < size(); i++) {
+		_data.small_data[i] = temp[i];	
+	}
+	_cur_data = _data.small_data;
 }
 
 template <class T>
