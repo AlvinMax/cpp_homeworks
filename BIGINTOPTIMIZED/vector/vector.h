@@ -192,7 +192,7 @@ template <class T>
 void vector<T>::pop_back() {
 	change();
 	_size--;
-	if(is_big() && _size == SMALL_SIZE) switch_to_small();
+	if(is_big() && size() <= SMALL_SIZE) switch_to_small();
 }
 
 template <class T>
@@ -242,7 +242,7 @@ template <class T>
 void vector<T>::switch_to_big() {
 	T* temp = copy_data(size(), get_data(), size());
 	new(&_data.big_data) big_object(temp, size());
-	_cur_data = temp;
+	_cur_data = _data.big_data.ptr.get();
 }
 
 template <class T>
@@ -252,6 +252,7 @@ void vector<T>::switch_to_small() {
 	for(size_t i = 0; i < size(); i++) {
 		_data.small_data[i] = temp[i];	
 	}
+	delete[] temp;
 	_cur_data = _data.small_data;
 }
 
