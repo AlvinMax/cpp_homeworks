@@ -252,7 +252,7 @@ void vector<T>::switch_to_small() {
 	for(size_t i = 0; i < size(); i++) {
 		_data.small_data[i] = temp[i];	
 	}
-	delete[] temp;
+	operator delete(temp);
 	_cur_data = _data.small_data;
 }
 

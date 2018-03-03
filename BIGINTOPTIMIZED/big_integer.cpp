@@ -446,7 +446,7 @@ big_integer div_big_by_small(big_integer const& first, E second) {
     }
     big_integer abs_first(first.absolute_value());
     bool is_negat = first.is_negative() ^ is_neg(second);
-    ull div = abs(static_cast<ll>(second));
+    ull div = std::llabs(static_cast<ll>(second));
     size_t size = first.length();
     vector<ui> temp(size);
     ull carry = 0;
