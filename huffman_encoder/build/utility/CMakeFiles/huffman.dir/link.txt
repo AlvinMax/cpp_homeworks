@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall -std=c++11 -O2 -pedantic -Wall -std=c++11 -O2 -pedantic   CMakeFiles/huffman.dir/file_reader.cpp.o CMakeFiles/huffman.dir/file_writer.cpp.o CMakeFiles/huffman.dir/compressor.cpp.o CMakeFiles/huffman.dir/decompressor.cpp.o CMakeFiles/huffman.dir/main.cpp.o  -o huffman -rdynamic ../lib/libhuf_lib.a 

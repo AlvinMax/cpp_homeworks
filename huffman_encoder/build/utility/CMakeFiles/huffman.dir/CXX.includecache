@@ -1,0 +1,124 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/headers/code.h
+consts.h
+../lib/headers/consts.h
+vector
+-
+
+../lib/headers/consts.h
+stdexcept
+-
+cstddef
+-
+cstdlib
+-
+cstdint
+-
+utility
+-
+
+../lib/headers/decoder.h
+huffman_tree.h
+../lib/headers/huffman_tree.h
+code.h
+../lib/headers/code.h
+
+../lib/headers/encoder.h
+huffman_tree.h
+../lib/headers/huffman_tree.h
+code.h
+../lib/headers/code.h
+
+../lib/headers/huffman_tree.h
+consts.h
+../lib/headers/consts.h
+summator.h
+../lib/headers/summator.h
+word.h
+../lib/headers/word.h
+
+../lib/headers/summator.h
+vector
+-
+consts.h
+../lib/headers/consts.h
+
+../lib/headers/word.h
+consts.h
+../lib/headers/consts.h
+
+../utility/headers/compressor.h
+file_reader.h
+../utility/headers/file_reader.h
+file_writer.h
+../utility/headers/file_writer.h
+encoder.h
+../utility/headers/encoder.h
+
+../utility/headers/decompressor.h
+file_reader.h
+../utility/headers/file_reader.h
+file_writer.h
+../utility/headers/file_writer.h
+decoder.h
+../utility/headers/decoder.h
+
+../utility/headers/file_reader.h
+consts.h
+../utility/headers/consts.h
+fstream
+-
+string
+-
+cstdlib
+-
+
+../utility/headers/file_writer.h
+consts.h
+../utility/headers/consts.h
+fstream
+-
+string
+-
+cstdlib
+-
+
+/home/max/Рабочий стол/huffman_encoder/utility/compressor.cpp
+iostream
+-
+compressor.h
+/home/max/Рабочий стол/huffman_encoder/utility/compressor.h
+
+/home/max/Рабочий стол/huffman_encoder/utility/decompressor.cpp
+iostream
+-
+decompressor.h
+/home/max/Рабочий стол/huffman_encoder/utility/decompressor.h
+
+/home/max/Рабочий стол/huffman_encoder/utility/file_reader.cpp
+file_reader.h
+/home/max/Рабочий стол/huffman_encoder/utility/file_reader.h
+
+/home/max/Рабочий стол/huffman_encoder/utility/file_writer.cpp
+file_writer.h
+/home/max/Рабочий стол/huffman_encoder/utility/file_writer.h
+
+/home/max/Рабочий стол/huffman_encoder/utility/main.cpp
+iostream
+-
+compressor.h
+/home/max/Рабочий стол/huffman_encoder/utility/compressor.h
+decompressor.h
+/home/max/Рабочий стол/huffman_encoder/utility/decompressor.h
+ctime
+-
+string
+-
+

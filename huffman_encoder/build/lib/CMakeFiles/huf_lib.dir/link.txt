@@ -1,0 +1,2 @@
+/usr/bin/ar qc libhuf_lib.a  CMakeFiles/huf_lib.dir/summator.cpp.o CMakeFiles/huf_lib.dir/word.cpp.o CMakeFiles/huf_lib.dir/huffman_tree.cpp.o CMakeFiles/huf_lib.dir/encoder.cpp.o CMakeFiles/huf_lib.dir/decoder.cpp.o
+/usr/bin/ranlib libhuf_lib.a

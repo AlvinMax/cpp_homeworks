@@ -1,0 +1,8 @@
+/home/max/Рабочий стол/huffman_encoder/build/CMakeFiles/edit_cache.dir
+/home/max/Рабочий стол/huffman_encoder/build/CMakeFiles/rebuild_cache.dir
+/home/max/Рабочий стол/huffman_encoder/build/lib/CMakeFiles/rebuild_cache.dir
+/home/max/Рабочий стол/huffman_encoder/build/lib/CMakeFiles/edit_cache.dir
+/home/max/Рабочий стол/huffman_encoder/build/lib/CMakeFiles/huf_lib.dir
+/home/max/Рабочий стол/huffman_encoder/build/utility/CMakeFiles/edit_cache.dir
+/home/max/Рабочий стол/huffman_encoder/build/utility/CMakeFiles/rebuild_cache.dir
+/home/max/Рабочий стол/huffman_encoder/build/utility/CMakeFiles/huffman.dir

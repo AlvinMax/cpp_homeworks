@@ -1,0 +1,84 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/headers/code.h
+consts.h
+../lib/headers/consts.h
+vector
+-
+
+../lib/headers/consts.h
+stdexcept
+-
+cstddef
+-
+cstdlib
+-
+cstdint
+-
+utility
+-
+
+../lib/headers/decoder.h
+huffman_tree.h
+../lib/headers/huffman_tree.h
+code.h
+../lib/headers/code.h
+
+../lib/headers/encoder.h
+huffman_tree.h
+../lib/headers/huffman_tree.h
+code.h
+../lib/headers/code.h
+
+../lib/headers/huffman_tree.h
+consts.h
+../lib/headers/consts.h
+summator.h
+../lib/headers/summator.h
+word.h
+../lib/headers/word.h
+
+../lib/headers/summator.h
+vector
+-
+consts.h
+../lib/headers/consts.h
+
+../lib/headers/word.h
+consts.h
+../lib/headers/consts.h
+
+/home/max/Рабочий стол/huffman_encoder/lib/decoder.cpp
+decoder.h
+/home/max/Рабочий стол/huffman_encoder/lib/decoder.h
+
+/home/max/Рабочий стол/huffman_encoder/lib/encoder.cpp
+encoder.h
+/home/max/Рабочий стол/huffman_encoder/lib/encoder.h
+
+/home/max/Рабочий стол/huffman_encoder/lib/huffman_tree.cpp
+huffman_tree.h
+/home/max/Рабочий стол/huffman_encoder/lib/huffman_tree.h
+set
+-
+stdexcept
+-
+utility
+-
+
+/home/max/Рабочий стол/huffman_encoder/lib/summator.cpp
+cstring
+-
+summator.h
+/home/max/Рабочий стол/huffman_encoder/lib/summator.h
+
+/home/max/Рабочий стол/huffman_encoder/lib/word.cpp
+word.h
+/home/max/Рабочий стол/huffman_encoder/lib/word.h
+
