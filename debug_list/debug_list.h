@@ -306,15 +306,7 @@ public:
         assert(!other.is_invalid);
         _node->push_back(this);
     }
-/*
-    template <typename OTHER_TYPE>
-    my_iterator(const my_iterator<OTHER_TYPE> &other,
-                typename std::enable_if<std::is_same<typename std::remove_const<VT>::type, OTHER_TYPE>::value>::type * = nullptr)
-    : _node(other._node), is_invalid(other.is_invalid), owner(other.owner), next(nullptr) {
-        assert(!other.is_invalid);
-        _node->push_back(this);
-    }
-*/
+    
     my_iterator (base_node *_node, debug_list<T> const*_owner)
         : _node(_node), is_invalid(false) {
         owner = _owner;
