@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Maxim/CLionProjects/debug_list/debug_list.h
+vector
+-
+cassert
+-
+
+C:/Users/Maxim/CLionProjects/debug_list/main.cpp
+iostream
+-
+debug_list.h
+C:/Users/Maxim/CLionProjects/debug_list/debug_list.h
+vector
+-
+list
+-
+
