@@ -97,6 +97,8 @@ private:
 public:
     typedef my_iterator<T> iterator;
     typedef my_iterator<const T> const_iterator;
+    typedef std::reverse_iterator<iterator> reverse_iterator;
+    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
     debug_list() : begin_node(), end_node() {
             begin_node = new base_node();
@@ -151,6 +153,22 @@ public:
     const_iterator end() const {
         return const_iterator(end_node, this);
     }
+
+    reverse_iterator rbegin() {
+        return reverse_iterator(end());
+    }
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(end());
+    }
+
+    reverse_iterator rend() {
+        return reverse_iterator(begin());
+    }
+    const_reverse_iterator rend() const {
+        return const_reverse_iterator(begin());
+    }
+
+
 
     void push_front(T const &new_data) {
         node* temp_node = new node(new_data);
@@ -306,7 +324,15 @@ public:
         assert(!other.is_invalid);
         _node->push_back(this);
     }
-    
+/*
+    template <typename OTHER_TYPE>
+    my_iterator(const my_iterator<OTHER_TYPE> &other,
+                typename std::enable_if<std::is_same<typename std::remove_const<VT>::type, OTHER_TYPE>::value>::type * = nullptr)
+    : _node(other._node), is_invalid(other.is_invalid), owner(other.owner), next(nullptr) {
+        assert(!other.is_invalid);
+        _node->push_back(this);
+    }
+*/
     my_iterator (base_node *_node, debug_list<T> const*_owner)
         : _node(_node), is_invalid(false) {
         owner = _owner;
