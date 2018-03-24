@@ -181,11 +181,19 @@ public:
         return const_iterator(begin_node->prev, this);
     }
 
+    const_iterator cbegin() const {
+        return const_iterator(begin_node->prev, this);
+    }
+
     iterator end() {
         return iterator(end_node, this);
     }
 
     const_iterator end() const {
+        return const_iterator(end_node, this);
+    }
+
+    const_iterator cend() const {
         return const_iterator(end_node, this);
     }
 
@@ -196,7 +204,10 @@ public:
     const_reverse_iterator rbegin() const {
         return const_reverse_iterator(end());
     }
-
+    const_reverse_iterator crbegin() const {
+        return const_reverse_iterator(end());
+    }
+    
     reverse_iterator rend() {
         return reverse_iterator(begin());
     }
@@ -204,6 +215,10 @@ public:
     const_reverse_iterator rend() const {
         return const_reverse_iterator(begin());
     }
+    const_reverse_iterator crend() const {
+        return const_reverse_iterator(begin());
+    }
+
 
     std::pair<iterator, bool> insert(T const &new_data) {
         node *temp = new node(new_data);
