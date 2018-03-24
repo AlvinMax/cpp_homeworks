@@ -69,6 +69,7 @@ private:
                     }
                 }
             }
+            other->get_next() = nullptr;
         }
 
         void update_owner_iterators(debug_set<T> const *new_owner) {
@@ -227,8 +228,9 @@ public:
 
     }
 
-    const_iterator erase(const_iterator &it) {
+    const_iterator erase(const_iterator const &it) {
         assert(this == it.owner);
+        assert(it._node != end_node);
 
         make_changeable();
         node *replacement = nullptr, *replaceParent = nullptr;
@@ -456,7 +458,7 @@ public:
 
     my_iterator &operator--() {
         assert(!is_invalid);
-        assert(_node != owner->begin_node->prev);
+        assert(_node != owner->begin_node);
         _node->erase(this);
 
         if (_node->left != nullptr) {
@@ -477,7 +479,7 @@ public:
 
     my_iterator operator--(int) {
         assert(!is_invalid);
-        assert(_node != owner->begin_node->prev);
+        assert(_node != owner->begin_node);
         my_iterator temp(*this);
         --(*this);
         return temp;
