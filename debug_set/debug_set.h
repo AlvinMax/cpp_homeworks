@@ -189,6 +189,13 @@ public:
         return const_iterator(end_node, this);
     }
 
+    reverse_iterator rbegin() {
+        return reverse_iterator(end());
+    }
+
+    reverse_iterator rend() {
+        return reverse_iterator(begin());
+    }
     const_reverse_iterator rbegin() const {
         return const_reverse_iterator(end());
     }
