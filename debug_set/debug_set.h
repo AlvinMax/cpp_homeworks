@@ -30,7 +30,7 @@ private:
         base_iterator *begin_iterator, *end_iterator;
         node *prev, *left, *right;
 
-        node() : prev(nullptr), left(nullptr), right(nullptr), begin_iterator(nullptr), end_iterator(nullptr) {}
+        node() : data(0), prev(nullptr), left(nullptr), right(nullptr), begin_iterator(nullptr), end_iterator(nullptr) {}
 
         node(T data) : data(data), prev(nullptr), left(nullptr), right(nullptr), begin_iterator(nullptr),
                        end_iterator(nullptr) {}
@@ -174,6 +174,13 @@ public:
         return *this;
     }
 
+    iterator begin() {
+        return iterator(begin_node->prev, this);
+    }
+
+    iterator end() {
+        return iterator(end_node, this);
+    }
     const_iterator begin() const {
         return const_iterator(begin_node->prev, this);
     }
