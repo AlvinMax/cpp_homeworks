@@ -359,6 +359,12 @@ public:
         return iterator(pre_node, this);
     }
 
+    iterator find(const T &element) {
+        iterator result = lower_bound(element);
+        if (result._node != end_node && *result == element) return result;
+        else return iterator(end_node, this);
+    }
+
     const_iterator find(const T &element) const {
         const_iterator result = lower_bound(element);
         if (result._node != end_node && *result == element) return result;
