@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Maxim/CLionProjects/debug_set/debug_set.h
+iterator
+-
+cassert
+-
+
+C:/Users/Maxim/CLionProjects/debug_set/main.cpp
+iostream
+-
+unordered_set
+-
+debug_set.h
+C:/Users/Maxim/CLionProjects/debug_set/debug_set.h
+
