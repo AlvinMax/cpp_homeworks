@@ -330,12 +330,41 @@ public:
         b.set_iterators();
     }
 
+    iterator lower_bound(const T &value) {
+        node *next_node = root, *pre_node = nullptr;
+
+        while (next_node != nullptr) {
+            pre_node = next_node;
+            if (next_node->data == value) break;
+            if (next_node->data > value) {
+                next_node = next_node->left;
+            } else {
+                next_node = next_node->right;
+            }
+        }
+        return iterator(pre_node, this);
+    }
+
     const_iterator lower_bound(const T &value) const {
         node *next_node = root, *pre_node = nullptr;
 
         while (next_node != nullptr) {
             pre_node = next_node;
             if (next_node->data == value) break;
+            if (next_node->data > value) {
+                next_node = next_node->left;
+            } else {
+                next_node = next_node->right;
+            }
+        }
+        return const_iterator(pre_node, this);
+    }
+
+    iterator upper_bound(const T &value) {
+        node *next_node = root, *pre_node = nullptr;
+
+        while (next_node != nullptr) {
+            pre_node = next_node;
             if (next_node->data > value) {
                 next_node = next_node->left;
             } else {
@@ -356,7 +385,7 @@ public:
                 next_node = next_node->right;
             }
         }
-        return iterator(pre_node, this);
+        return const_iterator(pre_node, this);
     }
 
     iterator find(const T &element) {
