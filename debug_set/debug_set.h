@@ -30,10 +30,9 @@ private:
         base_iterator *begin_iterator, *end_iterator;
         node *prev, *left, *right;
 
-        node() : data(0), prev(nullptr), left(nullptr), right(nullptr), begin_iterator(nullptr), end_iterator(nullptr) {}
+        node() : data(0), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
 
-        node(T data) : data(data), prev(nullptr), left(nullptr), right(nullptr), begin_iterator(nullptr),
-                       end_iterator(nullptr) {}
+        node(T data) : data(data), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
 
         static void add_left(node *x, node *y) {
             x->left = y;
@@ -125,7 +124,7 @@ private:
 
 public:
     typedef my_iterator<T> iterator;
-    typedef my_iterator<const T> const_iterator;
+    typedef my_iterator<T> const_iterator;
     typedef std::reverse_iterator<iterator> reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -141,8 +140,8 @@ public:
     }
 
     debug_set(debug_set const &other) : debug_set() {
-        for (node *i = other.begin_node->prev; i != other.end_node; i = i->prev) {
-            insert(i->data);
+        for(auto it = other.begin(); it != other.end(); ++it) {
+            insert(*it);
         }
     }
 
@@ -157,30 +156,12 @@ public:
         }
     }
 
-    void put_by_other(node *v, debug_set &ds) {
-        if (v == nullptr || v == end_node || v == begin_node) {
-            return;
-        }
-        ds.insert(v->data);
-        put_by_other(v->left, ds);
-        put_by_other(v->right, ds);
-    }
-
     debug_set &operator=(debug_set const &other) {
-        debug_set temp;
-        put_by_other(other.root, temp);
-        clear();
-        put_by_other(temp.root, *this);
+        debug_set temp(other);
+        swap(*this, temp);
         return *this;
     }
 
-    iterator begin() {
-        return iterator(begin_node->prev, this);
-    }
-
-    iterator end() {
-        return iterator(end_node, this);
-    }
     const_iterator begin() const {
         return const_iterator(begin_node->prev, this);
     }
@@ -189,13 +170,6 @@ public:
         return const_iterator(end_node, this);
     }
 
-    reverse_iterator rbegin() {
-        return reverse_iterator(end());
-    }
-
-    reverse_iterator rend() {
-        return reverse_iterator(begin());
-    }
     const_reverse_iterator rbegin() const {
         return const_reverse_iterator(end());
     }
@@ -204,31 +178,29 @@ public:
         return const_reverse_iterator(begin());
     }
 
-    std::pair<iterator, bool> insert(T const &new_data) {
+    std::pair<const_iterator, bool> insert(T const &new_data) {
         node *temp = new node(new_data);
         if (root == nullptr) {
             root = temp;
             set_iterators();
-            return {iterator(root, this), true};
+            return {const_iterator(root, this), true};
         }
 
         make_changeable();
 
         node *next_node = root, *pre_node = nullptr;
 
-
         while (next_node != nullptr) {
             pre_node = next_node;
+            if(next_node->data == temp->data) {
+                set_iterators();
+                return {const_iterator(next_node, this), false};
+            }
             if (next_node->data > temp->data) {
                 next_node = next_node->left;
             } else {
                 next_node = next_node->right;
             }
-        }
-
-        if (pre_node->data == temp->data) {
-            set_iterators();
-            return {iterator(pre_node, this), false};
         }
 
         if (pre_node->data > temp->data) {
@@ -238,8 +210,7 @@ public:
         }
 
         set_iterators();
-        return {iterator(temp, this), true};
-
+        return {const_iterator(temp, this), true};
     }
 
     const_iterator erase(const_iterator const &it) {
@@ -316,6 +287,7 @@ public:
     }
 
     friend void swap(debug_set &a, debug_set &b) {
+        if(&a == &b) return;
         a.make_changeable();
         b.make_changeable();
 
@@ -328,21 +300,6 @@ public:
 
         a.set_iterators();
         b.set_iterators();
-    }
-
-    iterator lower_bound(const T &value) {
-        node *next_node = root, *pre_node = nullptr;
-
-        while (next_node != nullptr) {
-            pre_node = next_node;
-            if (next_node->data == value) break;
-            if (next_node->data > value) {
-                next_node = next_node->left;
-            } else {
-                next_node = next_node->right;
-            }
-        }
-        return iterator(pre_node, this);
     }
 
     const_iterator lower_bound(const T &value) const {
@@ -360,44 +317,16 @@ public:
         return const_iterator(pre_node, this);
     }
 
-    iterator upper_bound(const T &value) {
-        node *next_node = root, *pre_node = nullptr;
-
-        while (next_node != nullptr) {
-            pre_node = next_node;
-            if (next_node->data > value) {
-                next_node = next_node->left;
-            } else {
-                next_node = next_node->right;
-            }
-        }
-        return iterator(pre_node, this);
-    }
-
     const_iterator upper_bound(const T &value) const {
-        node *next_node = root, *pre_node = nullptr;
-
-        while (next_node != nullptr) {
-            pre_node = next_node;
-            if (next_node->data > value) {
-                next_node = next_node->left;
-            } else {
-                next_node = next_node->right;
-            }
-        }
-        return const_iterator(pre_node, this);
-    }
-
-    iterator find(const T &element) {
-        iterator result = lower_bound(element);
-        if (result._node != end_node && *result == element) return result;
-        else return iterator(end_node, this);
+        const_iterator it = lower_bound(value);
+        if(it == end()) return end();
+        else return ++it;
     }
 
     const_iterator find(const T &element) const {
         const_iterator result = lower_bound(element);
         if (result._node != end_node && *result == element) return result;
-        else return const_iterator(end_node, this);
+        else return end();
     }
 
     ~debug_set() {
@@ -447,14 +376,6 @@ public:
         owner = _owner;
         next = nullptr;
         if (_node != nullptr) _node->insert(this);
-    }
-
-    template<typename OTHER_TYPE>
-    my_iterator(const my_iterator <OTHER_TYPE> &other,
-                typename std::enable_if<std::is_same<typename std::remove_const<VT>::type, OTHER_TYPE>::value>::type * = nullptr)
-            : _node(other._node), is_invalid(other.is_invalid), owner(other.owner), next(nullptr) {
-        assert(other.is_invalid == false);
-        _node->insert(this);
     }
 
     my_iterator &operator=(my_iterator const &other) {
@@ -507,7 +428,7 @@ public:
 
     my_iterator &operator--() {
         assert(!is_invalid);
-        assert(_node != owner->begin_node);
+        assert(_node != owner->begin_node->prev);
         _node->erase(this);
 
         if (_node->left != nullptr) {
@@ -528,7 +449,7 @@ public:
 
     my_iterator operator--(int) {
         assert(!is_invalid);
-        assert(_node != owner->begin_node);
+        assert(_node != owner->begin_node->prev);
         my_iterator temp(*this);
         --(*this);
         return temp;
@@ -553,12 +474,15 @@ public:
     }
 
     friend void swap(my_iterator &a, my_iterator &b) {
-        assert(a.owner == b.owner);
         assert(!a.is_invalid);
         assert(!b.is_invalid);
+        if(&a == &b) {
+            return;;
+        }
         a._node->erase(&a);
         b._node->erase(&b);
         std::swap(a._node, b._node);
+        std::swap(a.owner, b.owner);
         a._node->insert(&a);
         b._node->insert(&b);
     }
