@@ -12,11 +12,15 @@ template<typename T>
 class debug_set {
 private:
 
+    class node;
+
     class base_iterator {
     public:
         virtual void invalid() = 0;
 
         virtual void update_owner(debug_set<T> const *) = 0;
+
+        virtual void update_node(node*) = 0;
 
         virtual base_iterator *&get_next() = 0;
     };
@@ -269,7 +273,21 @@ public:
             }
         }
 
-        if (rep != node_) node_->data = rep->data;
+
+
+        if (rep != node_) {
+            node_->data = rep->data;
+
+            node_->invalid_all_iterators();
+            node_->begin_iterator = node_->end_iterator = nullptr;
+
+            for (base_iterator* it = rep->begin_iterator; it != nullptr; it = it->get_next()) {
+                node_->insert(it);
+                it->update_node(node_);
+            }
+            
+            rep->begin_iterator = rep->end_iterator = nullptr;
+        }
 
         delete rep;
         set_iterators();
@@ -354,6 +372,10 @@ private:
 
     void update_owner(debug_set<T> const *new_owner) override {
         owner = new_owner;
+    }
+
+    void update_node(node *new_node) override {
+        _node = new_node;
     }
 
     typename debug_set<T>::base_iterator *&get_next() override {
