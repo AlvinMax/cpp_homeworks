@@ -30,8 +30,7 @@ private:
         base_iterator *begin_iterator, *end_iterator;
         node *prev, *left, *right;
 
-        node() : data(0), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
-
+        node() : data(), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
         node(T data) : data(data), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
 
         static void add_left(node *x, node *y) {
@@ -151,7 +150,7 @@ public:
 
     void clear() {
         while (!empty()) {
-            debug_set::const_iterator it = begin();
+            auto it = begin();
             erase(it);
         }
     }
@@ -218,16 +217,16 @@ public:
         assert(it._node != end_node);
 
         make_changeable();
-        node *replacement = nullptr, *replaceParent = nullptr;
+        node *rep = nullptr, *rep_parent = nullptr;
 
         node *node_ = it._node;
         node *temp = node_;
 
         if (temp->left == nullptr && temp->right == nullptr) {
-            replacement = temp;
-            replaceParent = temp->prev;
+            rep = temp;
+            rep_parent = temp->prev;
 
-            if (replacement != root) {
+            if (rep != root) {
                 if (temp->prev->left == temp) {
                     temp->prev->left = nullptr;
                 } else {
@@ -238,44 +237,44 @@ public:
             if (temp->left != nullptr) {
                 temp = temp->left;
                 while (temp != nullptr) {
-                    replacement = temp;
+                    rep = temp;
                     temp = temp->right;
                 }
 
-                replaceParent = replacement->prev;
+                rep_parent = rep->prev;
 
-                if (replacement->prev->left == replacement)
-                    replacement->prev->left = replacement->left;
+                if (rep->prev->left == rep)
+                    rep->prev->left = rep->left;
                 else
-                    replacement->prev->right = replacement->left;
+                    rep->prev->right = rep->left;
 
-                if (replacement->left != nullptr)
-                    replacement->left->prev = replacement->prev;
+                if (rep->left != nullptr)
+                    rep->left->prev = rep->prev;
             } else {
-                replacement = temp;
-                replaceParent = replacement->prev;
+                rep = temp;
+                rep_parent = rep->prev;
 
-                if (replacement == root) {
-                    replacement->right->prev = nullptr;
-                    root = replacement->right;
+                if (rep == root) {
+                    rep->right->prev = nullptr;
+                    root = rep->right;
                 } else {
-                    if (replacement->prev->left == replacement)
-                        replacement->prev->left = replacement->right;
+                    if (rep->prev->left == rep)
+                        rep->prev->left = rep->right;
                     else
-                        replacement->prev->right = replacement->right;
+                        rep->prev->right = rep->right;
 
-                    if (replacement->right != nullptr)
-                        replacement->right->prev = replacement->prev;
+                    if (rep->right != nullptr)
+                        rep->right->prev = rep->prev;
                 }
             }
         }
 
-        if (replacement != node_) node_->data = replacement->data;
+        if (rep != node_) node_->data = rep->data;
 
-        delete replacement;
+        delete rep;
         set_iterators();
 
-        return const_iterator(replaceParent, this);
+        return const_iterator(rep_parent, this);
     }
 
 
