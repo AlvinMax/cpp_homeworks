@@ -20,7 +20,7 @@ private:
 
         virtual void update_owner(debug_set<T> const *) = 0;
 
-        virtual void update_node(node*) = 0;
+        virtual void update_node(node *) = 0;
 
         virtual base_iterator *&get_next() = 0;
     };
@@ -35,7 +35,9 @@ private:
         node *prev, *left, *right;
 
         node() : data(), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
-        node(T data) : data(data), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr), right(nullptr) {}
+
+        node(T data) : data(data), begin_iterator(nullptr), end_iterator(nullptr), prev(nullptr), left(nullptr),
+                       right(nullptr) {}
 
         static void add_left(node *x, node *y) {
             x->left = y;
@@ -143,7 +145,7 @@ public:
     }
 
     debug_set(debug_set const &other) : debug_set() {
-        for(auto it = other.begin(); it != other.end(); ++it) {
+        for (auto it = other.begin(); it != other.end(); ++it) {
             insert(*it);
         }
     }
@@ -195,7 +197,7 @@ public:
 
         while (next_node != nullptr) {
             pre_node = next_node;
-            if(next_node->data == temp->data) {
+            if (next_node->data == temp->data) {
                 set_iterators();
                 return {const_iterator(next_node, this), false};
             }
@@ -274,18 +276,17 @@ public:
         }
 
 
-
         if (rep != node_) {
             node_->data = rep->data;
 
             node_->invalid_all_iterators();
             node_->begin_iterator = node_->end_iterator = nullptr;
 
-            for (base_iterator* it = rep->begin_iterator; it != nullptr; it = it->get_next()) {
+            for (base_iterator *it = rep->begin_iterator; it != nullptr; it = it->get_next()) {
                 node_->insert(it);
                 it->update_node(node_);
             }
-            
+
             rep->begin_iterator = rep->end_iterator = nullptr;
         }
 
@@ -304,7 +305,7 @@ public:
     }
 
     friend void swap(debug_set &a, debug_set &b) {
-        if(&a == &b) return;
+        if (&a == &b) return;
         a.make_changeable();
         b.make_changeable();
 
@@ -331,12 +332,13 @@ public:
                 next_node = next_node->right;
             }
         }
-        return const_iterator(pre_node, this);
+        if(pre_node == begin_node) return begin();
+        else return const_iterator(pre_node, this);
     }
 
     const_iterator upper_bound(const T &value) const {
         const_iterator it = lower_bound(value);
-        if(it == end()) return end();
+        if (it == end()) return end();
         else return ++it;
     }
 
@@ -350,7 +352,6 @@ public:
         clear();
         delete begin_node;
         delete end_node;
-        if (root != nullptr) delete root;
     }
 };
 
@@ -497,8 +498,8 @@ public:
     friend void swap(my_iterator &a, my_iterator &b) {
         assert(!a.is_invalid);
         assert(!b.is_invalid);
-        if(&a == &b) {
-            return;;
+        if (&a == &b) {
+            return;
         }
         a._node->erase(&a);
         b._node->erase(&b);
