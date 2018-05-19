@@ -5,8 +5,10 @@
 #ifndef DEBUG_SET_DEBUG_SET_H
 #define DEBUG_SET_DEBUG_SET_H
 
+#include <iostream>
 #include <iterator>
 #include <cassert>
+#include <bits/unique_ptr.h>
 
 template<typename T>
 class debug_set {
@@ -184,9 +186,9 @@ public:
     }
 
     std::pair<const_iterator, bool> insert(T const &new_data) {
-        node *temp = new node(new_data);
+        std::unique_ptr<node>temp(new node(new_data));
         if (root == nullptr) {
-            root = temp;
+            root = temp.release();
             set_iterators();
             return {const_iterator(root, this), true};
         }
@@ -208,14 +210,15 @@ public:
             }
         }
 
-        if (pre_node->data > temp->data) {
-            node::add_left(pre_node, temp);
+        node* n = temp.release();
+        if (pre_node->data > n->data) {
+            node::add_left(pre_node, n);
         } else {
-            node::add_right(pre_node, temp);
+            node::add_right(pre_node, n);
         }
 
         set_iterators();
-        return {const_iterator(temp, this), true};
+        return {const_iterator(n, this), true};
     }
 
     const_iterator erase(const_iterator const &it) {
@@ -320,31 +323,37 @@ public:
         b.set_iterators();
     }
 
-    const_iterator lower_bound(const T &value) const {
-        node *next_node = root, *pre_node = nullptr;
-
-        while (next_node != nullptr) {
-            pre_node = next_node;
-            if (next_node->data == value) break;
-            if (next_node->data > value) {
-                next_node = next_node->left;
-            } else {
-                next_node = next_node->right;
-            }
+    friend node *get_lower(node *v, const T &value) {
+        if (v == nullptr || v->data == value) {
+            return v;
+        } else if (v->data < value) {
+            return get_lower(v->right, value);
+        } else {
+            node* ret = get_lower(v->left, value);
+            if(ret == nullptr || ret->data < value) return v;
+            return ret;
         }
-        if(pre_node == begin_node) return begin();
-        else return const_iterator(pre_node, this);
+    }
+
+    const_iterator lower_bound(const T &value) const {
+        node* ret = get_lower(root, value);
+        if(ret == begin_node) return begin();
+        if(ret == nullptr) return end();
+        return const_iterator (ret, this);
     }
 
     const_iterator upper_bound(const T &value) const {
         const_iterator it = lower_bound(value);
         if (it == end()) return end();
-        else return ++it;
+        else {
+            if (*it == value) ++it;
+            return it;
+        }
     }
 
     const_iterator find(const T &element) const {
         const_iterator result = lower_bound(element);
-        if (result._node != end_node && *result == element) return result;
+        if (result != end() && *result == element) return result;
         else return end();
     }
 
